@@ -20,7 +20,9 @@
     <ul id="messages"></ul>
 
     <script>
-        const socket = io();
+        const socket = io({
+            transports: ["websocket"]
+        });
         let currentRoom = "";
 
         function joinRoom() {
@@ -30,12 +32,16 @@
         }
 
         function sendMessage() {
+            if (!currentRoom) {
+                alert("Join a room first");
+                return;
+            }
             const inputMessage = document.getElementById("msg");
             socket.emit("room_message", {
                 room: currentRoom,
                 message: inputMessage.value
             });
-            inputMessage.value = ""
+            inputMessage.value = "";
         }
 
         socket.on("room_message", (data) => {

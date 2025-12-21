@@ -6,7 +6,13 @@ eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.config['SECERT_KEY'] = "secret123"
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
+socketio = SocketIO(
+    app,
+    cors_allowed_origins="*",
+    async_mode="eventlet",
+    ping_interval=25,   # seconds
+    ping_timeout=60     # seconds
+      )
 
 
 @app.route('/')
