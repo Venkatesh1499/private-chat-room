@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit, join_room
+import eventlet
+
+eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.config['SECERT_KEY'] = "secret123"
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 
 @app.route('/')
