@@ -254,6 +254,33 @@ socket.on("room_message", (data) => {
     }
 });
 
+// Handle mobile viewport height changes (keyboard appearance)
+function handleViewportResize() {
+    if (window.visualViewport) {
+        const vh = window.visualViewport.height * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+}
+
+// Initialize viewport handling for mobile
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleViewportResize);
+    handleViewportResize();
+}
+
+// Prevent zoom on input focus (iOS Safari)
+if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport) {
+                viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+            }
+        });
+    });
+}
+
 // Initialize when DOM is loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeEventListeners);
